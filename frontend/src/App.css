@@ -1,0 +1,278 @@
+* {
+  text-decoration: none !important;
+  padding: 0;
+  margin: 0;
+}
+
+.logo {
+  color: #333;
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+}
+
+.Login-form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+}
+
+.Login-form {
+  width: 420px;
+  box-shadow: rgb(0 0 0 / 16%) 1px 1px 10px;
+  padding: 30px 0 20px 0;
+  /*t r b l*/
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+.Login-form-content {
+  padding: 0 12% 0 12%;
+}
+
+.Login-form-title {
+  text-align: center;
+  margin: 1em 0;
+  font-size: 1.2em;
+  font-weight: 400;
+  color: rgb(45, 110, 209);
+
+}
+
+.password-input-container {
+  position: relative;
+}
+
+.password-toggle-icon {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+
+label {
+  font-size: 14px;
+  font-weight: 300;
+  color: rgb(34, 34, 34);
+}
+
+p a {
+  text-decoration: none;
+  color: #1967dd;
+}
+
+.btn-rounded {
+  border-radius: 30px;
+  margin: 1em 0;
+}
+
+.number-counter {
+  font-size: 24px;
+  color: #333;
+}
+
+.menu-items {
+  padding-left: .5em;
+  font-size: .9em;
+}
+
+img {
+  border-radius: 50%;
+}
+
+.inline-label {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 10px;
+}
+
+.nav-link {
+  color: #fff;
+  padding: 100px;
+  transition: background-color 0.3s;
+
+  border-radius: 3px;
+}
+
+.nav-link:hover {
+  background-color: #333;
+}
+
+/* code editor */
+.float-container {
+  background-color: #1d1d1d;
+  display: flex;
+  width: 100%;
+  color: #fff;
+  height: 100%;
+}
+
+.float-child-left {
+  padding: 1em;
+  width: 25%;
+  background-color: #151515;
+}
+
+.float-child-right {
+  width: 75%;
+  background-color: #100f0f;
+  padding: 2em;
+  display: flex;
+  flex-direction: column;
+}
+
+.float-child-right .right-child {
+  width: 100%;
+  border-radius: 2px solid red;
+}
+
+.right-child .content {
+  height: fit-content;
+  display: inline;
+}
+
+.right-child .content label {
+  color: #fff;
+}
+
+.space {
+  margin-left: .6em;
+  display: block;
+  overflow: hidden;
+  padding: 0 4px 0 6px;
+}
+
+.left-content {
+  padding: 150px 1em 0 3em;
+  /*t r b l*/
+}
+
+.run-btn {
+  width: 100px;
+  height: 40px;
+  background-color: rgb(22, 189, 22);
+  border: none;
+  color: #fff;
+  border-radius: .2em;
+  transition: all .2s ease;
+}
+
+.run-btn:hover,
+.back-btn:hover {
+  background-color: rgb(11, 90, 11);
+}
+.custom-select{
+  width: 50%;
+  display: inline-block;
+}
+.back-btn {
+  width: 30px;
+  height: 30px;
+  padding: .4em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: rgb(22, 189, 22);
+  cursor: pointer;
+  transition: all .2s ease;
+}
+
+.code label {
+  float: left;
+}
+
+.code span{
+  display: block;
+  overflow: hidden;
+  padding: 0 4 0 6;
+}
+
+body::-webkit-scrollbar {
+  width: 8px;
+}
+
+body::-webkit-scrollbar-track {
+  background: rgb(104, 104, 103);
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: rgb(45, 45, 46);
+  height: 10px;
+  border-radius: 20px;
+}
+
+.code label{
+  color: #f2f2f2 !important;
+}
+
+.testcase{
+  background-color:rgb(61, 63, 61);
+  border: none !important;
+  padding: 9px;
+  color: #f2f2f2;
+  display: inline;
+  font-size: 18px;
+  border-radius: 5px;
+  cursor:not-allowed !important;
+}
+
+.order-card {
+  color: #fff !important;
+}
+
+.bg-c-blue {
+  background: linear-gradient(45deg,#4099ff,#73b4ff);
+}
+
+.bg-c-green {
+  background: linear-gradient(45deg,#2ed8b6,#59e0c5);
+}
+
+.bg-c-yellow {
+  background: linear-gradient(45deg,#FFB64D,#ffcb80);
+}
+
+.bg-c-pink {
+  background: linear-gradient(45deg,#FF5370,#ff869a);
+}
+
+
+.card {
+  border-radius: 5px;
+  -webkit-box-shadow: 0 1px 2.94px 0.06px rgba(4,26,55,0.16);
+  box-shadow: 0 1px 2.94px 0.06px rgba(4,26,55,0.16);
+  border: none;
+  margin-bottom: 30px;
+  -webkit-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}
+
+.card .card-block {
+  padding: 25px;
+}
+
+.order-card i {
+  font-size: 26px;
+}
+
+.f-left {
+  float: left;
+}
+
+.f-right {
+  float: right;
+}
+
+.number-counter {
+  font-size: 24px;
+  color: #333;
+}
