@@ -8,7 +8,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import LockIcon from '@mui/icons-material/Lock';
 import jwt from 'jsonwebtoken';
 import axios from 'axios';
-
+import { ClipLoader } from 'react-spinners'
 const CodeSpace = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -165,7 +165,7 @@ const CodeSpace = () => {
                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                       <div>
                         <button className='run-btn' type='submit' onClick={handleRun}>Execute</button>
-                        {loading ? 'Loading...' : ' '}
+                        {loading ? <ClipLoader color="#36d7b7" /> : ' '}
                       </div>
                     </div>
                   </div>
