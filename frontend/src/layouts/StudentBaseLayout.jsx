@@ -34,7 +34,8 @@ export default StudentBaseLayout
 const styles = {
   container: {
     display: 'flex',
-    bgcolor: 'neutral.light',
+    bgcolor: 'neutral.main',
+    color:'neutral.light',
     height: 'calc(100% - 64px)'
   },
   mainSection: {

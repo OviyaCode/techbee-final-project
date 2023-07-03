@@ -2,6 +2,9 @@ import { createTheme } from "@mui/material";
 import { green, grey, indigo } from "@mui/material/colors";
 
 let theme = createTheme({
+    status: {
+        dark: '#1d1d1d',
+      },
     palette: {
         primary: {
             main: indigo[500],

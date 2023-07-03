@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-
+// import StarIcon from '@mui/icons-material/Star';
+import StarBorderIcon from '@mui/icons-material/StarBorder';
 const QuestionList = () => {
   const [question, setQuestion] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -56,34 +57,35 @@ const QuestionList = () => {
   return (
     <>
       <div className='container'>
-        <h5>You choose {question.category} category</h5>
-        <table className='table table-bordered'>
-          <thead>
-            <tr>
-              <th scope="col">Title</th>
-              <th scope="col">Description</th>
-              <th scope="col">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {question && question.questions.map((q) => (
-              <tr key={q._id}>
-                <th scope="row">{q.title}</th>
-                <th scope="row">{q.description}</th>
-                <th scope="row">
-                  <button className='btn btn-success'
-                    onClick={() =>
-                      handleAttempt(
-                        question.category,
-                        q._id,
-                        q.title,
-                        q.description
-                      )}>Attempt</button>
-                </th>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <h5>{question.category}</h5>
+        <div className='row'>
+          <div className='col-12 col-md-8'>
+            {question &&
+              question.questions.map((q) => (
+                <div className='card text-white bg-dark mb-3' key={q._id}>
+                  <div className='card-body d-flex justify-content-between' style={{display:"inline-flex"}}>
+                    <div className='col-8'><h6>{q.title}</h6></div>
+                    <StarBorderIcon/>
+                    <button
+                      className="btn btn-light"
+                      onClick={() =>
+                        handleAttempt(
+                          question.category,
+                          q._id,
+                          q.title,
+                          q.description
+                        )}
+                    >
+                      Solve Challenge
+                    </button>
+                  </div>
+                </div>
+              ))}
+          </div>
+          <div className='col-12 col-md-4'>
+            lorem
+          </div>
+        </div>
       </div>
     </>
   );

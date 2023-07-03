@@ -66,7 +66,7 @@ const UserResults = () => {
   return (
     <div className="container">
       <h4>Your Results</h4>
-      <table className="table table-bordered table-hover" style={{ width: '60%' }}>
+      <table className="table table-bordered table-hover table-dark" style={{ width: '60%' }}>
         <thead>
           <tr>
             <th scope="col">#</th>
@@ -84,14 +84,14 @@ const UserResults = () => {
               <td>{submission.question}</td>
               <td>{submission.score}</td>
               <td>
-                <IconButton onClick={() => handleResultClick(submission)}><VisibilityIcon /></IconButton>
+                <IconButton onClick={() => handleResultClick(submission)}><VisibilityIcon sx={{color:"#d1d1d1"}}/></IconButton>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
       {selectedResult && (
-        <div>
+        <div className="result">
           <h5>Selected Result:</h5>
           <p>Quiz Category: {selectedResult.categoryName}</p>
           <p>Completed: {selectedResult.question}</p>
