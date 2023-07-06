@@ -39,30 +39,34 @@ const runCode = async (req, res) => {
       return res.status(404).json({ message: 'Question not found' });
     }
 
-    const inputs = testCases.map(testCase => testCase.input);
-    const expectedOutputs = testCases.map(testCase => testCase.output);
+    const results = [];
 
-    const response = await axios.post('https://judge0-ce.p.rapidapi.com/submissions', {
-      source_code: code,
-      language_id: languageId,
-      stdin: JSON.stringify(inputs),
-      expected_output: JSON.stringify(expectedOutputs),
-      expected_output_files: [],
-      callback_url: '',
-    }, {
-      headers: {
-        'Content-Type': 'application/json',
-        'X-RapidAPI-Key': process.env.JUDGE0_API_KEY,
-        'X-RapidAPI-Host': 'judge0-ce.p.rapidapi.com',
+    for (let i = 0; i < testCases.length; i++) {
+      const testCase = testCases[i];
+
+      let inputs;
+      let expectedOutput;
+
+      if (Array.isArray(testCase.input)) {
+        inputs = JSON.parse(testCase.input);
+      } else {
+        inputs = [testCase.input];
       }
-    });
 
-    let submissionOutputs = [];
-    let testResult = null;
+      if (Array.isArray(testCase.output)) {
+        expectedOutput = JSON.parse(testCase.output);
+      } else {
+        expectedOutput = [testCase.output];
+      }
 
-    // Wait for submission to finish executing
-    while (true) {
-      const submissionStatusResponse = await axios.get(`https://judge0-ce.p.rapidapi.com/submissions/${response.data.token}`, {
+      const response = await axios.post('https://judge0-ce.p.rapidapi.com/submissions', {
+        source_code: code,
+        language_id: languageId,
+        stdin: JSON.stringify(inputs),
+        expected_output: JSON.stringify(expectedOutput),
+        expected_output_files: [],
+        callback_url: '',
+      }, {
         headers: {
           'Content-Type': 'application/json',
           'X-RapidAPI-Key': process.env.JUDGE0_API_KEY,
@@ -70,46 +74,46 @@ const runCode = async (req, res) => {
         }
       });
 
-      if (submissionStatusResponse.data.status.id <= 2) {
-        // Submission is still running, wait for 1 second before checking again
-        await new Promise(resolve => setTimeout(resolve, 1000));
-      } else {
-        // Submission has finished executing, get its output
-        const stdout = submissionStatusResponse.data.stdout;
-        if (stdout) {
-          if (stdout.includes('\n')) {
-            submissionOutputs = stdout.split('\n');
-          } else {
-            submissionOutputs.push(stdout)
+      let submissionOutputs = [];
+
+      while (true) {
+        const submissionStatusResponse = await axios.get(`https://judge0-ce.p.rapidapi.com/submissions/${response.data.token}`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'X-RapidAPI-Key': process.env.JUDGE0_API_KEY,
+            'X-RapidAPI-Host': 'judge0-ce.p.rapidapi.com',
           }
+        });
+
+        if (submissionStatusResponse.data.status.id <= 2) {
+          await new Promise(resolve => setTimeout(resolve, 1000));
+        } else {
+          const stdout = submissionStatusResponse.data.stdout;
+          if (stdout) {
+            if (stdout.includes('\n')) {
+              submissionOutputs = stdout.split('\n');
+            } else {
+              submissionOutputs.push(stdout);
+            }
+          }
+          break;
         }
-        submissionOutputs = submissionStatusResponse.data.stdout.split('\n');
-        break;
-      }
-    }
-
-    for (let i = 0; i < submissionOutputs.length; i++) {
-      const testCase = testCases[i];
-
-      if (!testCase || !testCase.input || !testCase.output) {
-        continue;
       }
 
-      const expectedOutput = testCase.output;
-      const submissionOutput = submissionOutputs[i];
+      const submissionOutput = submissionOutputs[0];
 
-      testResult = {
+      const testResult = {
         userId: userId,
         input: testCase.input,
-        expectedOutput: expectedOutput,
+        expectedOutput: testCase.output,
         submissionOutput: submissionOutput,
-        result: expectedOutput === submissionOutput ? 'Pass' : 'Fail'
+        result: expectedOutput[0] === submissionOutput ? 'Pass' : 'Fail'
       };
 
-      break; // Stop at the first valid test case
+      results.push(testResult);
     }
 
-    return res.status(200).json({ message: 'Code executed successfully', testResult: testResult, submissionId: response.data.token });
+    return res.status(200).json({ message: 'Code executed successfully', testResults: results });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: 'Internal Server Error' });

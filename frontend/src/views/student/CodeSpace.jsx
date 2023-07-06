@@ -16,6 +16,7 @@ const CodeSpace = () => {
   const { categoryName, questionId, questionTitle, questionDescription, questionTestcases } = location.state;
   const [loading, setLoading] = useState(false)
   const [executing, setExecuting] = useState(false)
+  const [error,setError] = useState(null)
   const token = localStorage.getItem('token');
   const decodedToken = jwt.decode(token);
   const userId = decodedToken ? decodedToken.id : '';
@@ -42,7 +43,7 @@ const CodeSpace = () => {
 
   const handleRun = async (e) => {
     e.preventDefault();
-    console.log(codeData)
+    // console.log(codeData)
     try {
       const { questionId, testCases, code, language, userId } = codeData;
       setLoading(true)
@@ -51,7 +52,7 @@ const CodeSpace = () => {
         input: JSON.parse(testCase.input),
         output: testCase.output,
       }));
-
+      console.log('this block working', codeData)
       const requestData = {
         userId: userId,
         questionId: questionId,
@@ -74,7 +75,7 @@ const CodeSpace = () => {
     } catch (error) {
       if (error.response) {
         const errorMessage = error.response.data.message;
-        console.log(errorMessage);
+       setError(errorMessage)
       }
     } finally {
       setLoading(false)
@@ -166,7 +167,9 @@ const CodeSpace = () => {
                       <div>
                         <button className='run-btn' type='submit' onClick={handleRun}>Execute</button>
                         {loading ? <ClipLoader color="#36d7b7" /> : ' '}
+                        {error ? <p style={{color:"#f00", fontSize:".9em", marginTop:'0.5em'}}>{error}</p>:" "}
                       </div>
+                      
                     </div>
                   </div>
                 </div>
