@@ -74,19 +74,19 @@ const StudSettings = () => {
                 {error && <p>{error}</p>}
                 <form className="form-example" onSubmit={handleUpdate}>
                     <div className="form-group row" style={{ marginBottom: '10px', marginTop: '20px' }}>
-                        <label className="col-sm-3 col-form-label">Email:</label>
+                        <label className="col-sm-3 col-form-label text-white">Email:</label>
                         <div className="col-sm-6">
                             <input type="email" value={email} className="form-control" onChange={(e) => setEmail(e.target.value)} />
                         </div>
                     </div>
                     <div className="form-group row" style={{ marginBottom: '10px' }}>
-                        <label className="col-sm-3 col-form-label">Current Password:</label>
+                        <label className="col-sm-3 col-form-label text-white">Current Password:</label>
                         <div className="col-sm-6">
                             <input type="password" value={password} className="form-control" onChange={(e) => setPassword(e.target.value)} />
                         </div>
                     </div>
                     <div className="form-group row" style={{ marginBottom: '10px' }}>
-                        <label className="col-sm-3 col-form-label">New Password:</label>
+                        <label className="col-sm-3 col-form-label text-white">New Password:</label>
                         <div className="col-sm-6">
                             <input type="password" value={newPassword} className="form-control" onChange={(e) => setNewPassword(e.target.value)} />
                         </div>
@@ -102,3 +102,4 @@ const StudSettings = () => {
 }
 
 export default StudSettings
+

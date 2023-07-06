@@ -1,0 +1,19 @@
+// vite.config.js
+import { defineConfig } from "file:///C:/TechBee-final-project/techbee/frontend/node_modules/vite/dist/node/index.js";
+import react from "file:///C:/TechBee-final-project/techbee/frontend/node_modules/@vitejs/plugin-react/dist/index.mjs";
+import { nodePolyfills } from "file:///C:/TechBee-final-project/techbee/frontend/node_modules/vite-plugin-node-polyfills/dist/index.js";
+var vite_config_default = defineConfig({
+  plugins: [
+    react(),
+    nodePolyfills({
+      protocolImports: true
+    })
+  ],
+  server: {
+    port: 3e3
+  }
+});
+export {
+  vite_config_default as default
+};
+//# sourceMappingURL=data:application/json;base64,ewogICJ2ZXJzaW9uIjogMywKICAic291cmNlcyI6IFsidml0ZS5jb25maWcuanMiXSwKICAic291cmNlc0NvbnRlbnQiOiBbImNvbnN0IF9fdml0ZV9pbmplY3RlZF9vcmlnaW5hbF9kaXJuYW1lID0gXCJDOlxcXFxUZWNoQmVlLWZpbmFsLXByb2plY3RcXFxcdGVjaGJlZVxcXFxmcm9udGVuZFwiO2NvbnN0IF9fdml0ZV9pbmplY3RlZF9vcmlnaW5hbF9maWxlbmFtZSA9IFwiQzpcXFxcVGVjaEJlZS1maW5hbC1wcm9qZWN0XFxcXHRlY2hiZWVcXFxcZnJvbnRlbmRcXFxcdml0ZS5jb25maWcuanNcIjtjb25zdCBfX3ZpdGVfaW5qZWN0ZWRfb3JpZ2luYWxfaW1wb3J0X21ldGFfdXJsID0gXCJmaWxlOi8vL0M6L1RlY2hCZWUtZmluYWwtcHJvamVjdC90ZWNoYmVlL2Zyb250ZW5kL3ZpdGUuY29uZmlnLmpzXCI7aW1wb3J0IHsgZGVmaW5lQ29uZmlnIH0gZnJvbSAndml0ZSdcbmltcG9ydCByZWFjdCBmcm9tICdAdml0ZWpzL3BsdWdpbi1yZWFjdCdcbmltcG9ydCB7IG5vZGVQb2x5ZmlsbHMgfSBmcm9tICd2aXRlLXBsdWdpbi1ub2RlLXBvbHlmaWxscydcblxuLy8gaHR0cHM6Ly92aXRlanMuZGV2L2NvbmZpZy9cbmV4cG9ydCBkZWZhdWx0IGRlZmluZUNvbmZpZyh7XG4gIHBsdWdpbnM6IFtcbiAgICByZWFjdCgpLFxuICAgIG5vZGVQb2x5ZmlsbHMoe1xuICAgICAgcHJvdG9jb2xJbXBvcnRzOnRydWUsXG4gICAgfSksXG4gIF0sXG4gIHNlcnZlcjp7XG4gICAgcG9ydDozMDAwLFxuICB9XG59KVxuIl0sCiAgIm1hcHBpbmdzIjogIjtBQUFxVCxTQUFTLG9CQUFvQjtBQUNsVixPQUFPLFdBQVc7QUFDbEIsU0FBUyxxQkFBcUI7QUFHOUIsSUFBTyxzQkFBUSxhQUFhO0FBQUEsRUFDMUIsU0FBUztBQUFBLElBQ1AsTUFBTTtBQUFBLElBQ04sY0FBYztBQUFBLE1BQ1osaUJBQWdCO0FBQUEsSUFDbEIsQ0FBQztBQUFBLEVBQ0g7QUFBQSxFQUNBLFFBQU87QUFBQSxJQUNMLE1BQUs7QUFBQSxFQUNQO0FBQ0YsQ0FBQzsiLAogICJuYW1lcyI6IFtdCn0K

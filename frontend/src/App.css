@@ -233,21 +233,33 @@ body::-webkit-scrollbar-thumb {
   background: linear-gradient(45deg,#2ed8b6,#59e0c5);
 }
 
+.bg-c-pink {
+  background: linear-gradient(45deg,#FF5370,#ff869a);
+}
+.bg-c-yellow {
+  background: linear-gradient(45deg,#e3cd4c,#cef559);
+}
+
+.bg-c-blue{
+  background: linear-gradient(45deg,#53acff,#4f91f4);
+}
+.bg-c-blue:hover{
+  background: #3a84f2;
+  transition: all 0.3s ease;
+}
 .bg-c-green:hover{
   background: #219780;
   transition: all 0.3s ease;
-}
-
-
-.bg-c-pink {
-  background: linear-gradient(45deg,#FF5370,#ff869a);
 }
 
 .bg-c-pink:hover{
   background: #d25e71;
   transition: all 0.3s ease;
 }
-
+.bg-c-yellow:hover{
+  background: #c7f04b;
+  transition: all 0.3s ease;
+}
 .card {
   cursor: pointer;
   border-radius: 5px;
