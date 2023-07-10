@@ -9,8 +9,15 @@ const submitCode = asyncHandler(async (req, res) => {
     const { submissionId, userId, code, questionId, languageId, score } = req.body;
     if (!req.body.submissionId || !req.body.userId || !req.body.submissionId || !req.body.questionId || !req.body.languageId || !req.body.score || !req.body.code) {
       res.status(404)
-      throw new Error("You can't made this submission")
+      throw new Error("You can't made this submission, required fields are missing")
     }
+
+    const previousSubmissionsCount = await Submission.countDocuments({ user: userId, question: questionId });
+    if (previousSubmissionsCount >= 3) {
+     return res.status(201).json({message:'You have reached the maximum limit of submissions for this question'})
+    }
+    
+   
     const submissionCode = await Submission.create({
       user: userId,
       question: questionId,
@@ -40,6 +47,7 @@ const runCode = async (req, res) => {
     }
 
     const results = [];
+    let submissionToken = '';
 
     for (let i = 0; i < testCases.length; i++) {
       const testCase = testCases[i];
@@ -48,13 +56,13 @@ const runCode = async (req, res) => {
       let expectedOutput;
 
       if (Array.isArray(testCase.input)) {
-        inputs = JSON.parse(testCase.input);
+        inputs = testCase.input;
       } else {
         inputs = [testCase.input];
       }
 
       if (Array.isArray(testCase.output)) {
-        expectedOutput = JSON.parse(testCase.output);
+        expectedOutput = testCase.output;
       } else {
         expectedOutput = [testCase.output];
       }
@@ -75,6 +83,8 @@ const runCode = async (req, res) => {
       });
 
       let submissionOutputs = [];
+      let testResult = null;
+      
 
       while (true) {
         const submissionStatusResponse = await axios.get(`https://judge0-ce.p.rapidapi.com/submissions/${response.data.token}`, {
@@ -98,27 +108,36 @@ const runCode = async (req, res) => {
           }
           break;
         }
+        submissionToken = response.data.token;
       }
 
+      
       const submissionOutput = submissionOutputs[0];
 
-      const testResult = {
+      for (let i = 0; i < submissionOutput.length; i++) {
+        if (!testCase || !testCase.input || !testCase.output) {
+          continue;
+        }
+      }
+
+      testResult = {
         userId: userId,
         input: testCase.input,
         expectedOutput: testCase.output,
         submissionOutput: submissionOutput,
-        result: expectedOutput[0] === submissionOutput ? 'Pass' : 'Fail'
+        finalAnswer: expectedOutput[0] === submissionOutput ? 'Pass' : 'Fail'
       };
 
       results.push(testResult);
     }
 
-    return res.status(200).json({ message: 'Code executed successfully', testResults: results });
+    return res.status(200).json({ message: 'Code executed successfully', results, submissionToken });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 };
+
 
 const getAllSubmissions = asyncHandler(async (req, res) => {
   try {
@@ -155,12 +174,28 @@ const getUserSubmissions = asyncHandler(async (req, res) => {
   }
 });
 
+const getUserSubmissionsCount = asyncHandler(async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const questionId = req.params.questionId;
 
+    const submissions = await Submission.find({ user: userId, question: questionId })
+      .select('_id user question code language score timestamp')
+      .lean();
 
+    const count = submissions.length;
+
+    res.status(200).json({ count, submissions });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
 
 module.exports = {
   submitCode,
   runCode,
   getUserSubmissions,
-  getAllSubmissions
+  getAllSubmissions,
+  getUserSubmissionsCount
 };

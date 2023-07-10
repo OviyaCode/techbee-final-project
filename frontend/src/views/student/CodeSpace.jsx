@@ -16,11 +16,10 @@ const CodeSpace = () => {
   const { categoryName, questionId, questionTitle, questionDescription, questionTestcases } = location.state;
   const [loading, setLoading] = useState(false)
   const [executing, setExecuting] = useState(false)
-  const [error,setError] = useState(null)
+  const [error, setError] = useState(null)
   const token = localStorage.getItem('token');
   const decodedToken = jwt.decode(token);
   const userId = decodedToken ? decodedToken.id : '';
-  // console.log(userId);
   const [testResult, setTestResult] = useState(null);
   const [submissionId, setSubmissionId] = useState(null);
 
@@ -39,22 +38,48 @@ const CodeSpace = () => {
       ...prevCodeData,
       language: selectedLanguage,
     }));
+    if (error && codeData.code === '') {
+      setError(null);
+    }
   };
 
   const handleRun = async (e) => {
     e.preventDefault();
-    // console.log(codeData)
+
     try {
-      const { questionId, testCases, code, language, userId } = codeData;
+
+      const { questionId, testCases, code, language } = codeData;
       setLoading(true)
       setExecuting(true)
-      const formattedTestCases = testCases.map((testCase) => ({
-        input: JSON.parse(testCase.input),
-        output: testCase.output,
-      }));
-      console.log('this block working', codeData)
+
+      const formattedTestCases = testCases.map((testCase) => {
+        let formattedInput;
+        let formattedOutput;
+
+        if (testCase.input.startsWith('[') && testCase.input.endsWith(']')) {
+          // Array input
+          formattedInput = JSON.parse(testCase.input);
+        } else {
+          // String input
+          formattedInput = testCase.input;
+        }
+
+        if (testCase.output.startsWith('[') && testCase.output.endsWith(']')) {
+          // Array output
+          formattedOutput = JSON.parse(testCase.output);
+        } else {
+          // String output
+          formattedOutput = testCase.output;
+        }
+
+        return {
+          input: formattedInput,
+          output: formattedOutput,
+        };
+      });
+
       const requestData = {
-        userId: userId,
+        userId: codeData.user,
         questionId: questionId,
         code: code,
         languageId: language,
@@ -62,20 +87,18 @@ const CodeSpace = () => {
       };
 
       await axios.post(`http://localhost:8080/api/submissions/${questionId}`, requestData).then((res) => {
-        console.log(res.data.testResult);
-        // setTestResult(res.data.testResult.result);
-        const { submissionId, testResult } = res.data;
+        console.log(res.data.results);
+        const result = res.data.results[0];
 
-        setTestResult(testResult.result)
-        console.log("testResult", testResult.result);
-        setSubmissionId(submissionId)
-        console.log("resSubmissionId", submissionId);
+        setTestResult(result.finalAnswer);
+        setSubmissionId(res.data.submissionToken);
+
 
       });
     } catch (error) {
       if (error.response) {
         const errorMessage = error.response.data.message;
-       setError(errorMessage)
+        setError(errorMessage)
       }
     } finally {
       setLoading(false)
@@ -83,6 +106,7 @@ const CodeSpace = () => {
     }
   };
 
+  console.log(submissionId)
   const handleSubmission = async (e) => {
     e.preventDefault();
 
@@ -95,19 +119,46 @@ const CodeSpace = () => {
       submissionId: submissionId
     };
 
-    await axios.post(`http://localhost:8080/api/submissions/save/${questionId}`, submissionCode)
+    // console.log(submissionCode);
+
+    // Get the submission count
+    await axios.get(`http://localhost:8080/api/submissions/${submissionCode.userId}/${submissionCode.questionId}`)
       .then(async (res) => {
-        console.log(res.data);
+        const submissionCount = res.data.count;
+
+        // Check if submission count is more than 3
+        if (submissionCount > 3) {
+          // return setError("You have reached the maximum limit of submissions for this question");
+        } else {
+          // Submit the code
+          await axios.post(`http://localhost:8080/api/submissions/save/${submissionCode.questionId}`, submissionCode)
+            .then(async (res) => {
+              if (res.data) {
+                console.log(res.data);
+                if(res.data.message){
+                  setError(res.data.message)
+                }
+                return res;
+              }
+            })
+            .catch((error) => {
+              if (error.response) {
+                const errorMessage = error.response.data.message;
+                setError(errorMessage);
+              }
+            });
+        }
       })
-    console.log(userId)
-    navigate(`/dashboard/user/${userId}`)
       .catch((error) => {
+        // Handle error while retrieving the submission count
         console.error(error);
       });
+
+    console.log(submissionCode.userId);
+    // navigate(`/dashboard/user/${submissionCode.userId}`);
   };
 
-
-
+console.log("error", error)
   const handleGoBack = () => {
     navigate(-1);
   };
@@ -167,9 +218,9 @@ const CodeSpace = () => {
                       <div>
                         <button className='run-btn' type='submit' onClick={handleRun}>Execute</button>
                         {loading ? <ClipLoader color="#36d7b7" /> : ' '}
-                        {error ? <p style={{color:"#f00", fontSize:".9em", marginTop:'0.5em'}}>{error}</p>:" "}
+                        {error ? <p style={{ color: "#f00", fontSize: ".9em", marginTop: '0.5em' }}>{error}</p> : " "}
                       </div>
-                      
+
                     </div>
                   </div>
                 </div>
