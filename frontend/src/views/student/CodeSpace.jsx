@@ -156,7 +156,7 @@ const CodeSpace = () => {
       });
 
     console.log(submissionCode.userId);
-    // navigate(`/dashboard/user/${submissionCode.userId}`);
+    navigate(`/dashboard/user/${submissionCode.userId}`);
   };
 
 console.log("error", error)
