@@ -180,7 +180,7 @@ const getUserSubmissionsCount = asyncHandler(async (req, res) => {
     const questionId = req.params.questionId;
 
     const submissions = await Submission.find({ user: userId, question: questionId })
-      .select('_id user question code language score timestamp')
+      .select('_id user question code language score status timestamp')
       .lean();
 
     const count = submissions.length;

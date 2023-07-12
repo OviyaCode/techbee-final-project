@@ -19,6 +19,12 @@ const submissionSchema = new mongoose.Schema({
         type:String,
         required:true
     },
+    status:{
+        type:String,
+        enum:['solved','unsolved'],
+        default:'unsolved',
+        required:true
+    },
     language:{
         type:String,
         enum:[71,62],

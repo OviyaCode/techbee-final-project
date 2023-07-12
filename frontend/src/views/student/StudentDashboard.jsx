@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 
 import { useEffect, useState } from "react";
 import { Link } from 'react-router-dom'
@@ -16,10 +17,10 @@ const StudentDashboard = () => {
   return (
     <div className="container">
       <div className="row">
-        <div className="col-lg-6">
-          <div>
-            <div>
-              <h5>Hellow...!  {username}</h5>
+        <div className="col-lg-12">
+          <div className="bg-c-dark-blue" style={{ width: '100%' }}>
+            <div className="card-body">
+             <h4>Your Preparation</h4>
             </div>
           </div>
         </div>
@@ -27,18 +28,18 @@ const StudentDashboard = () => {
       <div className='row'>
 
         <div className='col-md-4 col-xl-3'>
-          <div className='card bg-c-green order-card'>
+          <div className='card order-card bg-dark text-white' style={{ height: "10em" }}>
             <div className='card-block'>
               <div className='card-body'>
                 <h6 className='m-b-20'>Your Practices</h6>
                 <h2 className="text-right"><BsFileEarmarkCodeFill /></h2>
-                <Link className="f-right" to={'/dashboard/questions'} style={{ color: "#f2f2f2" }}>Click to Continue...</Link>
+                <Link className="text-right" to={'/dashboard/questions'} style={{ color: "#f2f2f2" }}>Click to Continue...</Link>
               </div>
             </div>
           </div>
         </div>
         <div className='col-md-4 col-xl-3'>
-          <div className='card bg-c-pink order-card'>
+          <div className='card order-card bg-dark text-white' style={{ height: "10em" }}>
             <div className='card-block'>
               <div className='card-body'>
                 <h6 className='m-b-20'>View Results</h6>

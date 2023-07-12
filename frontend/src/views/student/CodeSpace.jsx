@@ -116,7 +116,8 @@ const CodeSpace = () => {
       code: codeData.code,
       languageId: codeData.language,
       score: testResult,
-      submissionId: submissionId
+      submissionId: submissionId,
+      status:'solved'
     };
 
     // console.log(submissionCode);

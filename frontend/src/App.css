@@ -228,10 +228,17 @@ body::-webkit-scrollbar-thumb {
 .order-card {
   color: #fff !important;
 }
-
+.bg-c-dark-blue{
+  width: 100%;
+  background:#1a1a1a;
+  padding: 2em;
+  margin-bottom: 2em;
+  border-bottom: 1px solid rgb(16, 16, 16);
+}
 .bg-c-green {
   background: linear-gradient(45deg,#2ed8b6,#59e0c5);
 }
+
 
 .bg-c-pink {
   background: linear-gradient(45deg,#FF5370,#ff869a);

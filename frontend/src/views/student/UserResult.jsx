@@ -11,6 +11,7 @@ const UserResults = () => {
   const [userName, setUserName] = useState("");
   const [questionTitle, setQuestionTitle] = useState("");
   const [categoryName, setCategoryName] = useState("");
+  const [loading, setLoading] = useState(true);
   const { id } = useParams();
 
   useEffect(() => {
@@ -49,16 +50,21 @@ const UserResults = () => {
 
       console.log(fetchedSubmission);
       setUserResult(fetchedSubmission)
-
+      
 
     };
 
     fetchSubmission();
+    setLoading(false);
   }, [id]);
 
-  if (userResult.length === 0) {
-   return <p>No Records Found</p>
+  if(loading){
+    return <p>Loading...</p>
   }
+  else if (userResult.length === 0) {
+    return <p>No Records Found</p>
+   }
+ 
   const handleResultClick = (result) => {
     setSelectedResult((prevState) => (prevState === result ? null : result)); // Toggle selected result visibility
   };
