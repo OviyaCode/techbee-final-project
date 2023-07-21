@@ -41,7 +41,6 @@ const runCode = async (req, res) => {
   try {
     const { questionId, code, languageId, testCases, userId } = req.body;
 
-
     const questionDetails = await Question.findById(questionId);
     if (!questionDetails) {
       return res.status(404).json({ message: 'Question not found' });
@@ -49,6 +48,7 @@ const runCode = async (req, res) => {
 
     const results = [];
     let submissionToken = '';
+    let hasCompilationError = false;
 
     for (let i = 0; i < testCases.length; i++) {
       const testCase = testCases[i];
@@ -68,74 +68,93 @@ const runCode = async (req, res) => {
         expectedOutput = [testCase.output];
       }
 
-      const response = await axios.post('https://judge0-ce.p.rapidapi.com/submissions', {
-        source_code: code,
-        language_id: languageId,
-        stdin: JSON.stringify(inputs),
-        expected_output: JSON.stringify(expectedOutput),
-        expected_output_files: [],
-        callback_url: '',
-      }, {
-        headers: {
-          'Content-Type': 'application/json',
-          'X-RapidAPI-Key': process.env.JUDGE0_API_KEY,
-          'X-RapidAPI-Host': 'judge0-ce.p.rapidapi.com',
-        }
-      });
-
-      let submissionOutputs = [];
-      let testResult = null;
-
-
-      while (true) {
-        const submissionStatusResponse = await axios.get(`https://judge0-ce.p.rapidapi.com/submissions/${response.data.token}`, {
+      const response = await axios.post(
+        'https://judge0-ce.p.rapidapi.com/submissions',
+        {
+          source_code: code,
+          language_id: languageId,
+          stdin: JSON.stringify(inputs),
+          expected_output: JSON.stringify(expectedOutput),
+          expected_output_files: [],
+          callback_url: '',
+        },
+        {
           headers: {
             'Content-Type': 'application/json',
             'X-RapidAPI-Key': process.env.JUDGE0_API_KEY,
             'X-RapidAPI-Host': 'judge0-ce.p.rapidapi.com',
+          },
+        }
+      );
+
+      let submissionOutputs = [];
+      let testResult = null;
+      hasCompilationError = false; // Flag to indicate if a compilation error has occurred
+
+      while (true) {
+        const submissionStatusResponse = await axios.get(
+          `https://judge0-ce.p.rapidapi.com/submissions/${response.data.token}`,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'X-RapidAPI-Key': process.env.JUDGE0_API_KEY,
+              'X-RapidAPI-Host': 'judge0-ce.p.rapidapi.com',
+            },
           }
-        });
+        );
 
         if (submissionStatusResponse.data.status.id <= 2) {
-          await new Promise(resolve => setTimeout(resolve, 1000));
+          await new Promise((resolve) => setTimeout(resolve, 1000));
         } else {
           const stdout = submissionStatusResponse.data.stdout;
-          // console.log(submissionStatusResponse.data.stdout)
-          if (stdout) {
-            if (stdout.includes('\n')) {
-              submissionOutputs = stdout.split('\n');
-              
-            } else {
-              submissionOutputs.push(stdout);
-              
+          const statusId = submissionStatusResponse.data.status.id;
+          const statusDescription = submissionStatusResponse.data.status.description;
+
+          if (statusId === 6) {
+            // Compilation Error
+            hasCompilationError = true;
+            testResult = {
+              userId: userId,
+              input: testCase.input,
+              expectedOutput: testCase.output,
+              submissionOutput: null,
+              finalAnswer: 'Fail',
+              statusId: statusId,
+              statusDescription: statusDescription,
+            };
+            break; // Stop the execution when a compilation error is encountered
+          } else {
+            if (stdout) {
+              if (stdout.includes('\n')) {
+                submissionOutputs = stdout.split('\n');
+              } else {
+                submissionOutputs.push(stdout);
+              }
             }
-
           }
-
           break;
         }
         submissionToken = response.data.token;
       }
 
-      
-      const submissionOutput = submissionOutputs[0];
-
-
-      for (let i = 0; i < submissionOutput.length; i++) {
-        if (!testCase || !testCase.input || !testCase.output) {
-          continue;
-        }
+      if (!hasCompilationError) {
+        const submissionOutput = submissionOutputs[0];
+        const output = expectedOutput[0] === submissionOutput ? 'Pass' : 'Fail';
+        testResult = {
+          userId: userId,
+          input: testCase.input,
+          expectedOutput: testCase.output,
+          submissionOutput: submissionOutput,
+          finalAnswer: output,
+        };
       }
 
-      testResult = {
-        userId: userId,
-        input: testCase.input,
-        expectedOutput: testCase.output,
-        submissionOutput: submissionOutput,
-        finalAnswer: expectedOutput[0] === submissionOutput ? 'Pass' : 'Fail'
-      };
-
       results.push(testResult);
+    }
+
+    if (hasCompilationError) {
+      // If any of the test cases encountered a compilation error
+      return res.status(500).json({ message: 'Compilation Error, Please check your code' });
     }
 
     return res.status(200).json({ message: 'Code executed successfully', results, submissionToken });

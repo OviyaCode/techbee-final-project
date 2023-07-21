@@ -8,7 +8,9 @@ const Settings = () => {
     const [email, setEmail] = useState("")
     const [error, setError] = useState("")
     const [userId, setUserId] = useState(null)
+
     const navigate = useNavigate();
+
     useEffect(() => {
         const fetchCurrentUser = async () => {
             try {
@@ -52,8 +54,8 @@ const Settings = () => {
 
             setPassword("");
             setNewPassword("");
-            setEmail("");
             setError("");
+            navigate(-1)
         } catch (error) {
             if (error.response) {
                 const errorMessage = error.response.data.message;
