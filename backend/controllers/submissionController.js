@@ -24,7 +24,8 @@ const submitCode = asyncHandler(async (req, res) => {
       submissionId: submissionId,
       code: req.body.code,
       language: req.body.languageId,
-      score: req.body.score
+      score: req.body.score,
+      status:"solved"
     })
     res.status(200).json({
       submissionData: submissionCode
