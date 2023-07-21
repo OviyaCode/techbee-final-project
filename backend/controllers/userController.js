@@ -6,9 +6,9 @@ const Result = require('../models/resultModel');
 const Submission = require('../models/submissionModel');
 
 const registerUser = asyncHandler(async (req, res) => {
-    const { name, email, password,role } = req.body
+    const { name, email, password, role } = req.body
 
-    if (!email || !password || !name ) {
+    if (!email || !password || !name) {
         res.status(400)
         throw new Error('Please fill all fields')
     }
@@ -80,22 +80,26 @@ const updateUser = asyncHandler(async (req, res) => {
         res.status(400)
         throw new Error("User not found");
     }
-
+    if (req.body.password) {
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(req.body.password, salt)
+        req.body.password = hashedPassword;
+    }
     const updateUser = await User.findByIdAndUpdate(req.params.id, req.body, { new: true })
-    
+
     res.status(200).json({
         updateUser
     })
 })
 
-const getUser = asyncHandler(async(req,res)=>{
+const getUser = asyncHandler(async (req, res) => {
     const user = await User.findById(req.params.id)
-    if(!user){
+    if (!user) {
         res.status(400)
         throw new Error('User not found')
     }
     res.status(200).json({
-        user:user
+        user: user
     })
 })
 
@@ -119,9 +123,9 @@ const deleteUser = asyncHandler(async (req, res) => {
 
     // Delete the associated submissions
     await Submission.deleteMany({ user: user });
-  
+
     // Delete the user
-    await user.deleteOne();  
+    await user.deleteOne();
 
     res.status(200).json({
         message: `User deleted ${req.params.id}`

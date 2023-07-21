@@ -14,10 +14,10 @@ const submitCode = asyncHandler(async (req, res) => {
 
     const previousSubmissionsCount = await Submission.countDocuments({ user: userId, question: questionId });
     if (previousSubmissionsCount >= 3) {
-     return res.status(201).json({message:'You have reached the maximum limit of submissions for this question'})
+      return res.status(201).json({ message: 'You have reached the maximum limit of submissions for this question' })
     }
-    
-   
+
+
     const submissionCode = await Submission.create({
       user: userId,
       question: questionId,
@@ -40,6 +40,7 @@ const submitCode = asyncHandler(async (req, res) => {
 const runCode = async (req, res) => {
   try {
     const { questionId, code, languageId, testCases, userId } = req.body;
+
 
     const questionDetails = await Question.findById(questionId);
     if (!questionDetails) {
@@ -84,7 +85,7 @@ const runCode = async (req, res) => {
 
       let submissionOutputs = [];
       let testResult = null;
-      
+
 
       while (true) {
         const submissionStatusResponse = await axios.get(`https://judge0-ce.p.rapidapi.com/submissions/${response.data.token}`, {
@@ -99,13 +100,18 @@ const runCode = async (req, res) => {
           await new Promise(resolve => setTimeout(resolve, 1000));
         } else {
           const stdout = submissionStatusResponse.data.stdout;
+          // console.log(submissionStatusResponse.data.stdout)
           if (stdout) {
             if (stdout.includes('\n')) {
               submissionOutputs = stdout.split('\n');
+              
             } else {
               submissionOutputs.push(stdout);
+              
             }
+
           }
+
           break;
         }
         submissionToken = response.data.token;
@@ -113,6 +119,7 @@ const runCode = async (req, res) => {
 
       
       const submissionOutput = submissionOutputs[0];
+
 
       for (let i = 0; i < submissionOutput.length; i++) {
         if (!testCase || !testCase.input || !testCase.output) {

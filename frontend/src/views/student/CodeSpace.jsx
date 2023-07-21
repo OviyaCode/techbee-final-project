@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import AceEditor from 'react-ace';
 import 'ace-builds/src-noconflict/theme-monokai';
 import 'ace-builds/src-noconflict/mode-java';
@@ -22,6 +23,8 @@ const CodeSpace = () => {
   const userId = decodedToken ? decodedToken.id : '';
   const [testResult, setTestResult] = useState(null);
   const [submissionId, setSubmissionId] = useState(null);
+
+
 
   const [codeData, setCodeData] = useState({
     user: userId,
@@ -48,7 +51,11 @@ const CodeSpace = () => {
 
     try {
 
-      const { questionId, testCases, code, language } = codeData;
+      const { questionId, testCases, code, language, user } = codeData;
+
+      
+      // console.log("User ID:", user);
+
       setLoading(true)
       setExecuting(true)
 
@@ -86,6 +93,8 @@ const CodeSpace = () => {
         testCases: formattedTestCases,
       };
 
+      console.log(JSON.stringify(requestData, null, 2));
+      
       await axios.post(`http://localhost:8080/api/submissions/${questionId}`, requestData).then((res) => {
         console.log(res.data.results);
         const result = res.data.results[0];
@@ -106,7 +115,7 @@ const CodeSpace = () => {
     }
   };
 
-  console.log(submissionId)
+  console.log("submissionId :", submissionId)
   const handleSubmission = async (e) => {
     e.preventDefault();
 
@@ -117,7 +126,7 @@ const CodeSpace = () => {
       languageId: codeData.language,
       score: testResult,
       submissionId: submissionId,
-      status:'solved'
+      status: 'solved'
     };
 
     // console.log(submissionCode);
@@ -136,7 +145,7 @@ const CodeSpace = () => {
             .then(async (res) => {
               if (res.data) {
                 console.log(res.data);
-                if(res.data.message){
+                if (res.data.message) {
                   setError(res.data.message)
                 }
                 return res;
@@ -159,7 +168,6 @@ const CodeSpace = () => {
     navigate(`/dashboard/user/${submissionCode.userId}`);
   };
 
-console.log("error", error)
   const handleGoBack = () => {
     navigate(-1);
   };
@@ -174,6 +182,7 @@ console.log("error", error)
                 <h6>Quiz category: {categoryName}</h6>
                 <h6>Question: {questionTitle}</h6>
                 <p>{questionDescription}</p>
+                <p>Note that you can made <span style={{ color: "#f00" }}>only 3 submissions</span> </p>
               </div>
               <div className='row'>
                 <button type='button' className='btn btn-outline-primary' onClick={handleGoBack} style={{ width: '100px' }}>
