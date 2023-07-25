@@ -20,12 +20,21 @@ const QuestionList = () => {
   const decodedToken = jwt.decode(token);
   const userId = decodedToken ? decodedToken.id : '';
 
+  const shuffleQuestions = (array) => {
+    const newArray = array.slice();
+    for (let i = newArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+    }
+    return newArray;
+  };
+
   useEffect(() => {
     axios
       .get(`http://localhost:8080/api/questions/category/${id}`)
       .then((res) => {
         setQuestion(res.data);
-        const questionIds = res.data.questions.map((q) => q._id); // Collect all question IDs
+        const questionIds = res.data.questions.map((q) => q._id);
         setQuestionIds(questionIds);
         setLoading(false);
       })
@@ -72,10 +81,10 @@ const QuestionList = () => {
       input: testcase.input,
       output: testcase.output
     }));
-  
+
     const attemptCount = state.filter((s) => s.questionId === questionId).length;
     const isAttemptDisabled = attemptCount >= 3;
-  
+
     if (!isAttemptDisabled) {
       navigate(`/dashboard/code`, {
         state: {
@@ -88,7 +97,6 @@ const QuestionList = () => {
       });
     }
   };
-  
 
   const toggleShowSolved = () => {
     setShowSolved(!showSolved);
@@ -98,7 +106,9 @@ const QuestionList = () => {
     setShowUnsolved(!showUnsolved);
   };
 
-  const filteredQuestions = question.questions.filter((q) => {
+  const shuffledQuestions = shuffleQuestions(question.questions);
+
+  const filteredQuestions = shuffledQuestions.filter((q) => {
     const questionState = state.find((s) => s.questionId === q._id)?.status;
     if ((!showSolved && !showUnsolved) || (showSolved && questionState === 'solved') || (showUnsolved && questionState !== 'solved')) {
       return true;
@@ -146,7 +156,7 @@ const QuestionList = () => {
           </div>
           <div className='col-12 col-md-4'>
             <div className='mb-3'>
-              <label style={{color:"#777"}}>
+              <label style={{ color: "#777" }}>
                 <input
                   type='checkbox'
                   checked={showSolved}
@@ -157,7 +167,7 @@ const QuestionList = () => {
               </label>
             </div>
             <div className='mb-3'>
-              <label style={{color:"#777"}}>
+              <label style={{ color: "#777" }}>
                 <input
                   type='checkbox'
                   checked={showUnsolved}
@@ -175,3 +185,4 @@ const QuestionList = () => {
 };
 
 export default QuestionList;
+
