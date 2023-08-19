@@ -91,7 +91,7 @@ const runCode = async (req, res) => {
       let submissionOutputs = [];
       let testResult = null;
       hasCompilationError = false; // Flag to indicate if a compilation error has occurred
-
+      
       while (true) {
         const submissionStatusResponse = await axios.get(
           `https://judge0-ce.p.rapidapi.com/submissions/${response.data.token}`,
@@ -110,7 +110,6 @@ const runCode = async (req, res) => {
           const stdout = submissionStatusResponse.data.stdout;
           const statusId = submissionStatusResponse.data.status.id;
           const statusDescription = submissionStatusResponse.data.status.description;
-
           if (statusId === 6) {
             // Compilation Error
             hasCompilationError = true;

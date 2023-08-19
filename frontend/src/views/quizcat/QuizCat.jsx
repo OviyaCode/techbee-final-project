@@ -37,7 +37,7 @@ const QuizCat = () => {
     console.log(id);
     axios.delete(`http://localhost:8080/api/quizcat/${id}`)
       .then(() => {
-        toast.success("User deleted successfully")
+        toast.success("Quiz category deleted successfully")
         fetchQuizCategories()
       })
       .catch((error) => {

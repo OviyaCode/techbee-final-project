@@ -79,6 +79,7 @@ const UpdateQuizCat = () => {
       axios.put(`http://localhost:8080/api/quizcat/${id}`, questionData)
         .then((res) => {
           console.log(res.data);
+          navigate('/admindashboard/quizcat');
         })
         .catch((error) => {
           if (error.response) {
