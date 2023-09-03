@@ -40,9 +40,9 @@ const UpdateQuizCat = () => {
   const [selectedDiff, setSelectedDiff] = useState('')
 
   const diffOptions = [
-    { value: 'Easy', label: 'Easy' },
-    { value: 'Medium', label: 'Medium' },
-    { value: 'Hard', label: 'Hard' },
+    { value: 'Primary', label: 'Primary' },
+    { value: 'Intermediate', label: 'Intermediate' },
+    { value: 'Advance', label: 'Advance' },
   ]
 
   const typeOptions = [
@@ -123,7 +123,7 @@ const UpdateQuizCat = () => {
           />
         </div>
         <div className='mb-3 row'>
-          <label className='col-sm-2 col-form-label'>Difficulty</label>
+          <label className='col-sm-2 col-form-label'>Proficiency Level</label>
           <Select
             name='difficulty'
             options={diffOptions}

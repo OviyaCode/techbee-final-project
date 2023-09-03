@@ -79,7 +79,7 @@ const Question = () => {
       )}
       <Button variant='outline' onClick={handleRefresh} sx={{ marginBottom: 4 }}><RefreshIcon /></Button>
       <Button variant='outline' onClick={handleBack} sx={{ marginBottom: 4, marginLeft:4 }}>Back</Button>
-      <table className='table' style={{ width: '70%', alignContent: 'center' }}>
+      <table className='table' style={{ width: '100%', alignContent: 'center' }}>
         <thead>
           <tr>
             <th>#</th>

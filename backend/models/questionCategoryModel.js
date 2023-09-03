@@ -19,7 +19,7 @@ const QuestionCategorySchema = new Schema({
     },
     difficulty: {
         type: String,
-        enum: ['Easy', 'Medium', 'Hard']
+        enum: ['Primary', 'Intermediate', 'Advance']
     },
     createAt: {
         type: Date,

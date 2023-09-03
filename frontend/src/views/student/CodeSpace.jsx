@@ -48,6 +48,7 @@ const CodeSpace = () => {
 
   const handleRun = async (e) => {
     e.preventDefault();
+    setError(null)
 
     try {
 
@@ -92,7 +93,6 @@ const CodeSpace = () => {
         languageId: language,
         testCases: formattedTestCases,
       };
-
       console.log(JSON.stringify(requestData, null, 2));
       
       await axios.post(`http://localhost:8080/api/submissions/${questionId}`, requestData).then((res) => {
@@ -129,7 +129,7 @@ const CodeSpace = () => {
       status: 'solved'
     };
 
-    // console.log(submissionCode);
+    console.log(submissionCode);
 
     // Get the submission count
     await axios.get(`http://localhost:8080/api/submissions/${submissionCode.userId}/${submissionCode.questionId}`)

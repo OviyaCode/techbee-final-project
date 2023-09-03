@@ -22,9 +22,9 @@ const CreateQuizCat = () => {
     const [selectedDiff, setSelectedDiff] = useState('')
 
     const diffOptions = [
-        { value: 'Easy', label: 'Easy' },
-        { value: 'Medium', label: 'Medium' },
-        { value: 'Hard', label: 'Hard' },
+        { value: 'Primary', label: 'Primary' },
+        { value: 'Intermediate', label: 'Intermediate' },
+        { value: 'Advance', label: 'Advance' },
     ]
 
     const typeOptions = [
@@ -82,7 +82,7 @@ const CreateQuizCat = () => {
                     />
                 </div>
                 <div className='mb-3 row'>
-                    <label className='col-sm-5 col-form-label'>Type</label>
+                    <label className='col-sm-5 col-form-label'>Proficiency</label>
                     <Select name='type'
                         options={typeOptions}
                         value={typeOptions.find((typeOptions) => typeOptions.value === questionData.type)}
@@ -92,7 +92,7 @@ const CreateQuizCat = () => {
                     />
                 </div>
                 <div className='mb-3 row'>
-                    <label className='col-sm-6 col-form-label'>Difficulty</label>
+                    <label className='col-sm-6 col-form-label'>Proficiency Level</label>
                     <Select name='difficulty'
                         options={diffOptions}
                         value={diffOptions.find((diffOptions) => diffOptions.value === questionData.difficulty)}

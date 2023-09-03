@@ -42,6 +42,6 @@ const styles = {
     marginTop: '64px',
     p: 4,
     width: '100%',
-    height: '100vh',
+    height: '120vh',
   }
 }

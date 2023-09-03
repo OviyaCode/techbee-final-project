@@ -169,10 +169,12 @@ img {
 .back-btn:hover {
   background-color: rgb(11, 90, 11);
 }
-.custom-select{
+
+.custom-select {
   width: 50%;
   display: inline-block;
 }
+
 .back-btn {
   width: 30px;
   height: 30px;
@@ -190,7 +192,7 @@ img {
   float: left;
 }
 
-.code span{
+.code span {
   display: block;
   overflow: hidden;
   padding: 0 4 0 6;
@@ -210,68 +212,75 @@ body::-webkit-scrollbar-thumb {
   border-radius: 20px;
 }
 
-.code label{
+.code label {
   color: #f2f2f2 !important;
 }
 
-.testcase{
-  background-color:rgb(61, 63, 61);
+.testcase {
+  background-color: rgb(61, 63, 61);
   border: none !important;
   padding: 9px;
   color: #f2f2f2;
   display: inline;
   font-size: 18px;
   border-radius: 5px;
-  cursor:not-allowed !important;
+  cursor: not-allowed !important;
 }
 
 .order-card {
   color: #fff !important;
 }
-.bg-c-dark-blue{
+
+.bg-c-dark-blue {
   width: 100%;
-  background:#1a1a1a;
+  background: #1a1a1a;
   padding: 2em;
   margin-bottom: 2em;
   border-bottom: 1px solid rgb(16, 16, 16);
 }
+
 .bg-c-green {
-  background: linear-gradient(45deg,#2ed8b6,#59e0c5);
+  background: linear-gradient(45deg, #2ed8b6, #59e0c5);
 }
 
 
 .bg-c-pink {
-  background: linear-gradient(45deg,#FF5370,#ff869a);
-}
-.bg-c-yellow {
-  background: linear-gradient(45deg,#e3cd4c,#cef559);
+  background: linear-gradient(45deg, #FF5370, #ff869a);
 }
 
-.bg-c-blue{
-  background: linear-gradient(45deg,#53acff,#4f91f4);
+.bg-c-yellow {
+  background: linear-gradient(45deg, #e3cd4c, #cef559);
 }
-.bg-c-blue:hover{
+
+.bg-c-blue {
+  background: linear-gradient(45deg, #53acff, #4f91f4);
+}
+
+.bg-c-blue:hover {
   background: #3a84f2;
   transition: all 0.3s ease;
 }
-.bg-c-green:hover{
+
+.bg-c-green:hover {
   background: #219780;
   transition: all 0.3s ease;
 }
 
-.bg-c-pink:hover{
+.bg-c-pink:hover {
   background: #d25e71;
   transition: all 0.3s ease;
 }
-.bg-c-yellow:hover{
+
+.bg-c-yellow:hover {
   background: #c7f04b;
   transition: all 0.3s ease;
 }
+
 .card {
   cursor: pointer;
   border-radius: 5px;
-  -webkit-box-shadow: 0 1px 2.94px 0.06px rgba(4,26,55,0.16);
-  box-shadow: 0 1px 2.94px 0.06px rgba(4,26,55,0.16);
+  -webkit-box-shadow: 0 1px 2.94px 0.06px rgba(4, 26, 55, 0.16);
+  box-shadow: 0 1px 2.94px 0.06px rgba(4, 26, 55, 0.16);
   border: none;
   margin-bottom: 30px;
   -webkit-transition: all 0.3s ease-in-out;
@@ -285,12 +294,14 @@ body::-webkit-scrollbar-thumb {
 .order-card i {
   font-size: 26px;
 }
-.result{
+
+.result {
   border-radius: .4em;
   padding: 2em;
   background: #333 !important;
   color: #f2f2f2 !important;
 }
+
 .f-left {
   float: left;
 }

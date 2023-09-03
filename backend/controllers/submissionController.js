@@ -25,7 +25,7 @@ const submitCode = asyncHandler(async (req, res) => {
       code: req.body.code,
       language: req.body.languageId,
       score: req.body.score,
-      status:"solved"
+      status: "solved"
     })
     res.status(200).json({
       submissionData: submissionCode
@@ -91,7 +91,7 @@ const runCode = async (req, res) => {
       let submissionOutputs = [];
       let testResult = null;
       hasCompilationError = false; // Flag to indicate if a compilation error has occurred
-      
+
       while (true) {
         const submissionStatusResponse = await axios.get(
           `https://judge0-ce.p.rapidapi.com/submissions/${response.data.token}`,
@@ -134,8 +134,9 @@ const runCode = async (req, res) => {
           }
           break;
         }
-        submissionToken = response.data.token;
       }
+      submissionToken = response.data.token;
+      // console.log(submissionToken)
 
       if (!hasCompilationError) {
         const submissionOutput = submissionOutputs[0];
@@ -156,7 +157,6 @@ const runCode = async (req, res) => {
       // If any of the test cases encountered a compilation error
       return res.status(500).json({ message: 'Compilation Error, Please check your code' });
     }
-
     return res.status(200).json({ message: 'Code executed successfully', results, submissionToken });
   } catch (err) {
     console.error(err);

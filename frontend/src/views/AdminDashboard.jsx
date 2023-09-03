@@ -56,7 +56,7 @@ const AdminDashboard = () => {
                                 <h6 className='m-b-20'>Total Users</h6>
                                 <h2 className='text-right'><FaUsers /></h2>
                                 <p className="m-b-0">Registered<span className="f-right"><CountUp end={userCount} duration={1.5} prefix='0'
-                                    decimals={2} /></span></p>
+                                    /></span></p>
                                 <Link to={'/admindashboard/admin'} style={{ color: "#f2f2f2" }}>More Details</Link>
                             </div>
                         </div>
@@ -69,7 +69,7 @@ const AdminDashboard = () => {
                                 <h6 className='m-b-20'>Total Quiz Categories</h6>
                                 <h2 className='text-right'> <MdCategory /></h2>
                                 <p className="m-b-0">Created<span className="f-right"><CountUp end={quizCategoryCount} duration={1.5} prefix='0'
-                                    decimals={2} /></span></p>
+                                    /></span></p>
                                 <Link to={'/admindashboard/quizcat'} style={{ color: "#f2f2f2" }}>More Details</Link>
                             </div>
                         </div>
@@ -82,7 +82,7 @@ const AdminDashboard = () => {
                                 <h6 className='m-b-20'>Total Questions</h6>
                                 <h2 className='text-right'><BsFillPatchQuestionFill /></h2>
                                 <p className="m-b-0">Created<span className="f-right"><CountUp end={questionCount} duration={1.5} prefix='0'
-                                    decimals={2} /></span></p>
+                                    /></span></p>
                                 <Link to={'/admindashboard/question'} style={{ color: "#f2f2f2" }}>More Details</Link>
                             </div>
                         </div>
@@ -95,7 +95,7 @@ const AdminDashboard = () => {
                                 <h6 className='m-b-20'>Total Results</h6>
                                 <h2 className='text-right'><BsFillBarChartFill /></h2>
                                 <p className="m-b-0">Results recorded<span className="f-right"><CountUp end={resultCount} duration={1.5} prefix='0'
-                                    decimals={2} /></span></p>
+                                    /></span></p>
                                 <Link to={'/admindashboard/results'} style={{ color: "#f2f2f2" }}>More Details</Link>
                             </div>
                         </div>

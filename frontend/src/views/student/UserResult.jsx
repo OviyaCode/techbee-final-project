@@ -16,55 +16,55 @@ const UserResults = () => {
 
   useEffect(() => {
     const fetchSubmission = async () => {
-      const response = await axios.get(`http://localhost:8080/api/submissions/${id}`);
-      const submissionData = response.data.submissions;
-      // console.log(response.data.submissions);
-      const fetchedSubmission = await Promise.all(submissionData.map(async (submission) => {
-        const code = submission.code;
-        const userId = submission.user;
-        const questionId = submission.question._id;
-        const score = submission.score;
+      try {
+        const response = await axios.get(`http://localhost:8080/api/submissions/${id}`);
+        const submissionData = response.data.submissions;
 
-        // Fetch user details
-        const userResponse = await axios.get(`http://localhost:8080/api/users/${userId}`);
-        const user = userResponse.data.user.name;
-        setUserName(user);
+        const fetchedSubmission = await Promise.all(submissionData.map(async (submission) => {
+          const code = submission.code;
+          const userId = submission.user;
+          const questionId = submission.question._id;
+          const score = submission.score;
 
-        // Fetch question details
-        const questionResponse = await axios.get(`http://localhost:8080/api/questions/${questionId}`);
-        const question = questionResponse.data.question.title;
-        setQuestionTitle(question);
+          // Fetch user details
+          const userResponse = await axios.get(`http://localhost:8080/api/users/${userId}`);
+          const user = userResponse.data.user.name;
 
-        const categoryData = questionResponse.data.question.categoryData;
-        const categoryName = categoryData.name; // Access the "name" property
-        // console.log("catgory",categoryName);
+          // Fetch question details
+          const questionResponse = await axios.get(`http://localhost:8080/api/questions/${questionId}`);
+          const question = questionResponse.data.question.title;
 
-        return {
-          code,
-          user,
-          question,
-          score,
-          categoryName
-        };
-      }));
+          const categoryData = questionResponse.data.question.categoryData;
+          const categoryName = categoryData.name;
 
-      console.log(fetchedSubmission);
-      setUserResult(fetchedSubmission)
-      
+          return {
+            code,
+            user,
+            question,
+            score,
+            categoryName
+          };
+        }));
 
+        setUserResult(fetchedSubmission);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setLoading(false); // Set loading to false even on error
+      }
     };
 
     fetchSubmission();
-    setLoading(false);
   }, [id]);
 
-  if(loading){
-    return <p>Loading...</p>
+  if (loading) {
+    return <p>Loading...</p>;
   }
-  else if (userResult.length === 0) {
-    return <p>No Records Found</p>
-   }
- 
+
+  if (userResult.length === 0) {
+    return <p>No Records Found</p>;
+  }
+
   const handleResultClick = (result) => {
     setSelectedResult((prevState) => (prevState === result ? null : result)); // Toggle selected result visibility
   };
@@ -90,7 +90,9 @@ const UserResults = () => {
               <td>{submission.question}</td>
               <td>{submission.score}</td>
               <td>
-                <IconButton onClick={() => handleResultClick(submission)}><VisibilityIcon sx={{color:"#d1d1d1"}}/></IconButton>
+                <IconButton onClick={() => handleResultClick(submission)}>
+                  <VisibilityIcon sx={{ color: "#d1d1d1" }} />
+                </IconButton>
               </td>
             </tr>
           ))}
@@ -102,7 +104,7 @@ const UserResults = () => {
           <p>Quiz Category: {selectedResult.categoryName}</p>
           <p>Completed: {selectedResult.question}</p>
           <p>Score: {selectedResult.score}</p>
-          <details open>
+          <details>
             <summary>Code:</summary>
             <pre>{selectedResult.code}</pre>
           </details>

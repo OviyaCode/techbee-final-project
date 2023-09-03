@@ -74,7 +74,7 @@ const QuizCat = () => {
             <th>#</th>
             <th>Category</th>
             <th>Proficiency</th>
-            <th>Difficulty</th>
+            <th>Proficiency Level</th>
             <th colSpan={2}>Actions</th>
           </tr>
         </thead>
