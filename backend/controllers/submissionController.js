@@ -90,7 +90,7 @@ const runCode = async (req, res) => {
 
       let submissionOutputs = [];
       let testResult = null;
-      hasCompilationError = false; // Flag to indicate if a compilation error has occurred
+      hasCompilationError = false; 
 
       while (true) {
         const submissionStatusResponse = await axios.get(
@@ -111,7 +111,6 @@ const runCode = async (req, res) => {
           const statusId = submissionStatusResponse.data.status.id;
           const statusDescription = submissionStatusResponse.data.status.description;
           if (statusId === 6) {
-            // Compilation Error
             hasCompilationError = true;
             testResult = {
               userId: userId,
@@ -122,7 +121,7 @@ const runCode = async (req, res) => {
               statusId: statusId,
               statusDescription: statusDescription,
             };
-            break; // Stop the execution when a compilation error is encountered
+            break;
           } else {
             if (stdout) {
               if (stdout.includes('\n')) {
@@ -136,7 +135,6 @@ const runCode = async (req, res) => {
         }
       }
       submissionToken = response.data.token;
-      // console.log(submissionToken)
 
       if (!hasCompilationError) {
         const submissionOutput = submissionOutputs[0];
@@ -152,17 +150,17 @@ const runCode = async (req, res) => {
 
       results.push(testResult);
     }
-
     if (hasCompilationError) {
-      // If any of the test cases encountered a compilation error
       return res.status(500).json({ message: 'Compilation Error, Please check your code' });
     }
+    
     return res.status(200).json({ message: 'Code executed successfully', results, submissionToken });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 };
+
 
 
 const getAllSubmissions = asyncHandler(async (req, res) => {

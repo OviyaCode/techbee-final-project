@@ -27,7 +27,7 @@ const submissionSchema = new mongoose.Schema({
     },
     language:{
         type:String,
-        enum:[71,62],
+        enum:[53,62],
         required:true
     },
     score:{
