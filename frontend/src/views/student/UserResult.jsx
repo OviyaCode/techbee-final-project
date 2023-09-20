@@ -8,11 +8,11 @@ import { IconButton } from "@mui/material";
 const UserResults = () => {
   const [userResult, setUserResult] = useState([]);
   const [selectedResult, setSelectedResult] = useState(null);
-  const [userName, setUserName] = useState("");
-  const [questionTitle, setQuestionTitle] = useState("");
-  const [categoryName, setCategoryName] = useState("");
   const [loading, setLoading] = useState(true);
   const { id } = useParams();
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [resultsPerPage] = useState(5);
 
   useEffect(() => {
     const fetchSubmission = async () => {
@@ -62,8 +62,16 @@ const UserResults = () => {
   }
 
   if (userResult.length === 0) {
-    return <p>No Records Found</p>;
+    return <p>No Records Found <span style={{ color: "#666", cursor: 'pointer', fontSize: '.8em' }}>click to go back</span></p>;
   }
+
+  // Calculate the index of the last and first user for the current page
+  const indexOfLastUser = currentPage * resultsPerPage;
+  const indexOfFirstUser = indexOfLastUser - resultsPerPage;
+  const currentUsers = userResult.slice(indexOfFirstUser, indexOfLastUser);
+
+  // Function to change the current page
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const handleResultClick = (result) => {
     setSelectedResult((prevState) => (prevState === result ? null : result)); // Toggle selected result visibility
@@ -72,7 +80,7 @@ const UserResults = () => {
   return (
     <div className="container">
       <h4>Your Results</h4>
-      <table className="table table-bordered table-hover table-dark" style={{ width: '60%' }}>
+      <table className="table table-bordered table-hover table-dark" style={{ width: '80%' }}>
         <thead>
           <tr>
             <th scope="col">#</th>
@@ -83,9 +91,9 @@ const UserResults = () => {
           </tr>
         </thead>
         <tbody>
-          {userResult.map((submission, index) => (
+          {currentUsers.map((submission, index) => (
             <tr key={index}>
-              <td>{index + 1}</td>
+              <td>{indexOfFirstUser + index + 1}</td>
               <td>{submission.categoryName}</td>
               <td>{submission.question}</td>
               <td>{submission.score}</td>
@@ -110,6 +118,24 @@ const UserResults = () => {
           </details>
         </div>
       )}
+
+      {/* Pagination */}
+      <nav style={{marginTop:'2em'}}>
+        <ul className='pagination'>
+          {Array.from({ length: Math.ceil(userResult.length / resultsPerPage) }, (_, i) => (
+            <li key={i} className={`page-item ${currentPage === i + 1 ? 'active' : ''}`}>
+              <button className='page-link' onClick={() => paginate(i + 1)} style={{
+                backgroundColor: currentPage === i + 1 ? '#333' : '#666',
+                color: currentPage === i + 1 ? '#f2f2f2' : '#fff'
+              }}>
+                {i + 1}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
 import { Button, IconButton, Typography } from '@mui/material';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
@@ -6,64 +6,73 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-
 import { toast } from 'react-toastify';
+
 const QuizCat = () => {
-
-  const [quizData, setQuizData] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [quizData, setQuizData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(5);
   const navigate = useNavigate();
-
 
   const fetchQuizCategories = () => {
     axios.get("http://localhost:8080/api/quizcat")
       .then(res => {
         console.log(res.data);
-        setQuizData(res.data.quizCat)
-        setLoading(false)
-      })
+        setQuizData(res.data.quizCat);
+        setLoading(false);
+      });
   }
 
   useEffect(() => {
-    fetchQuizCategories()
-  }, [])
+    fetchQuizCategories();
+  }, []);
 
   const handleRefresh = () => {
     setLoading(true);
-    fetchQuizCategories()
+    fetchQuizCategories();
   }
 
   const handleDelete = (id) => {
     console.log(id);
     axios.delete(`http://localhost:8080/api/quizcat/${id}`)
       .then(() => {
-        toast.success("Quiz category deleted successfully")
-        fetchQuizCategories()
+        toast.success("Quiz category deleted successfully");
+        fetchQuizCategories();
       })
       .catch((error) => {
         console.log(error);
-      })
+      });
   }
+
   const handleCreate = () => {
-    navigate('/admindashboard/quizcat/create')
+    navigate('/admindashboard/quizcat/create');
   }
 
   if (loading) {
     return <p>Loading...</p>;
   }
 
-  const isAdmin = localStorage.getItem('role') === 'admin'
-  const isEditor = localStorage.getItem('role') === 'editor'
-  
-  const handleBack = () =>{
-    navigate(-1)
+  const isAdmin = localStorage.getItem('role') === 'admin';
+  const isEditor = localStorage.getItem('role') === 'editor';
+
+  const handleBack = () => {
+    navigate(-1);
   }
+
+  // Calculate the index of the last and first item for the current page
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentQuizData = quizData.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Function to change the current page
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   return (
     <div className='container'>
       <Typography sx={styles.pageTitle} variant='h5'>Manage Quiz Categories</Typography>
       {isEditor && (
         <Button variant='contained' color='success' onClick={handleCreate} sx={{ marginBottom: 4 }}>Create</Button>
-
       )}
       <Button variant='outline' onClick={handleRefresh} sx={{ marginBottom: 4 }}><RefreshIcon /></Button>
       <Button variant='outline' onClick={handleBack} sx={{ marginBottom: 4 }}>Back</Button>
@@ -79,14 +88,13 @@ const QuizCat = () => {
           </tr>
         </thead>
         <tbody>
-          {
-            quizData.map((quiz, index) =>
-              <tr key={quiz._id}>
-                <td>{index + 1}</td>
-                <td>{quiz.name}</td>
-                <td>{quiz.type}</td>
-                <td>{quiz.difficulty}</td>
-                <td>
+          {currentQuizData.map((quiz, index) => (
+            <tr key={quiz._id}>
+              <td>{index + 1}</td>
+              <td>{quiz.name}</td>
+              <td>{quiz.type}</td>
+              <td>{quiz.difficulty}</td>
+              <td>
                 {isAdmin ? (
                   <Link style={{ color: '#222' }} to={`/admindashboard/quizcat/update/${quiz._id}`}>
                     <IconButton><VisibilityIcon /></IconButton>
@@ -105,18 +113,29 @@ const QuizCat = () => {
                     )}
                   </>
                 )}
-                </td>
-              </tr>)
-          }
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
+
+      {/* Pagination */}
+      <nav>
+        <ul className='pagination'>
+          {Array.from({ length: Math.ceil(quizData.length / itemsPerPage) }, (_, i) => (
+            <li key={i} className={`page-item ${currentPage === i + 1 ? 'active' : ''}`}>
+              <button className='page-link' onClick={() => paginate(i + 1)}>
+                {i + 1}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </nav>
     </div>
-  )
+  );
 }
 
-export default QuizCat
-
-
+export default QuizCat;
 
 const styles = {
   pageTitle: {
@@ -125,4 +144,4 @@ const styles = {
   buttons: {
     color: 'grey'
   }
-}
+};

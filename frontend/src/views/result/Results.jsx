@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
 import axios from 'axios';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -10,10 +9,13 @@ const Results = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [usersPerPage] = useState(5);
+
   useEffect(() => {
     axios.get('http://localhost:8080/api/submissions')
       .then((res) => {
-        setResults(res.data.submissions)
+        setResults(res.data.submissions);
         setLoading(false);
       })
       .catch((error) => {
@@ -59,10 +61,18 @@ const Results = () => {
   if (results.length === 0) {
     return (
       <p onClick={handleBack}>
-        No Records found. <span style={{ color: "#666", cursor: 'pointer', fontSize: '.8em' }}>click to back</span>
+        No Records found. <span style={{ color: "#666", cursor: 'pointer', fontSize: '.8em' }}>click to go back</span>
       </p>
     );
   }
+
+  // Calculate the index of the last and first user for the current page
+  const indexOfLastUser = currentPage * usersPerPage;
+  const indexOfFirstUser = indexOfLastUser - usersPerPage;
+  const currentUsers = results.slice(indexOfFirstUser, indexOfLastUser);
+
+  // Function to change the current page
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <div className="container">
@@ -81,7 +91,7 @@ const Results = () => {
           </tr>
         </thead>
         <tbody>
-          {results.map((result, index) =>
+          {currentUsers.map((result, index) =>
             <tr key={result._id}>
               <td>{index + 1}</td>
               <td>{result.user ? result.user.name : '-'}</td>
@@ -96,6 +106,19 @@ const Results = () => {
           )}
         </tbody>
       </table>
+
+      {/* Pagination */}
+      <nav>
+        <ul className='pagination'>
+          {Array.from({ length: Math.ceil(results.length / usersPerPage) }, (_, i) => (
+            <li key={i} className={`page-item ${currentPage === i + 1 ? 'active' : ''}`}>
+              <button className='page-link' onClick={() => paginate(i + 1)}>
+                {i + 1}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </nav>
     </div>
   );
 }
