@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { IconButton } from "@mui/material";
 
@@ -11,8 +11,15 @@ const UserResults = () => {
   const [loading, setLoading] = useState(true);
   const { id } = useParams();
 
+  const navigate = useNavigate()
+
   const [currentPage, setCurrentPage] = useState(1);
   const [resultsPerPage] = useState(5);
+
+  const handleBack = () =>{
+    navigate('/dashboard')
+  }
+
 
   useEffect(() => {
     const fetchSubmission = async () => {
@@ -62,7 +69,7 @@ const UserResults = () => {
   }
 
   if (userResult.length === 0) {
-    return <p>No Records Found <span style={{ color: "#666", cursor: 'pointer', fontSize: '.8em' }}>click to go back</span></p>;
+    return <p>No Records Found <span style={{ color: "#666", cursor: 'pointer', fontSize: '.8em' }} onClick={handleBack}>click to go back</span></p>;
   }
 
   // Calculate the index of the last and first user for the current page
@@ -120,7 +127,7 @@ const UserResults = () => {
       )}
 
       {/* Pagination */}
-      <nav style={{marginTop:'2em'}}>
+      <nav style={{ marginTop: '2em' }}>
         <ul className='pagination'>
           {Array.from({ length: Math.ceil(userResult.length / resultsPerPage) }, (_, i) => (
             <li key={i} className={`page-item ${currentPage === i + 1 ? 'active' : ''}`}>

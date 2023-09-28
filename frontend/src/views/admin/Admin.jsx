@@ -95,7 +95,7 @@ const Admin = () => {
           <tbody>
             {currentUsers.map((user, index) =>
               <tr key={user._id}>
-                <td>{index + 1}</td>
+                <td>{index + 1 + (currentPage - 1) * usersPerPage}</td>
                 <td>{user.name.charAt(0).toUpperCase() + user.name.slice(1)}</td>
                 <td>{user.email}</td>
                 <td>{user.role.charAt(0).toUpperCase() + user.role.slice(1)}</td>

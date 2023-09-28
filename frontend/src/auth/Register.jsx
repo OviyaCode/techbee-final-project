@@ -2,6 +2,8 @@ import { useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { Link, useNavigate } from 'react-router-dom';
+import { RiEyeFill, RiEyeOffFill } from 'react-icons/ri';
+
 const Register = () => {
   const navigate = useNavigate();
 
@@ -11,10 +13,20 @@ const Register = () => {
     password: '',
     confirmPassword: '',
   });
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleChange = (event) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
   };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
+
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -33,23 +45,29 @@ const Register = () => {
           console.log(response.data);
           localStorage.setItem(response.data.token)
           toast.success('Account created successfully')
+          hasError = false;
         })
         .catch((error) => {
           if (error.response) {
             const errorMessage = error.response.data.message;
-            console.log(errorMessage);
+            // console.log(errorMessage);
             toast.error(errorMessage)
+            hasError = true;
+            if (errorMessage === 'User already exists') {
+              hasError = true;
+            }
+
           }
-          else {
-            console.log('An error occurred');
+        })
+        .finally(() => {
+          if (!hasError) {
+            // console.log("hasError function :", hasError)
+            navigate('/')
           }
-        });
+        })
     }
 
-    if (!hasError) {
-      navigate('/')
-      toast.success('Succeed')
-    }
+
   };
 
   return (
@@ -81,25 +99,35 @@ const Register = () => {
           </div>
           <div className='form-group mt-3'>
             <label>Password</label>
-            <input
-              type='password'
-              className='form-control mt-1'
-              name='password'
-              placeholder='Enter password'
-              value={formData.password}
-              onChange={handleChange}
-            />
+            <div className='password-input-container'>
+              <input
+                type={showPassword ? 'text' : 'password'}
+                className='form-control mt-1 password-input'
+                name='password'
+                placeholder='Enter password'
+                value={formData.password}
+                onChange={handleChange}
+              />
+              <span className='password-toggle-icon' onClick={togglePasswordVisibility}>
+                {showPassword ? <RiEyeOffFill /> : <RiEyeFill />}
+              </span>
+            </div>
           </div>
           <div className='form-group mt-3'>
             <label>Confirm Password</label>
-            <input
-              type='password'
-              className='form-control mt-1'
-              name='confirmPassword'
-              placeholder='Retype password'
-              value={formData.confirmPassword}
-              onChange={handleChange}
-            />
+            <div className='password-input-container'>
+              <input
+                type={showConfirmPassword ? 'text' : 'password'}
+                className='form-control mt-1 password-input'
+                name='confirmPassword'
+                placeholder='Retype password'
+                value={formData.confirmPassword}
+                onChange={handleChange}
+              />
+              <span className='password-toggle-icon' onClick={toggleConfirmPasswordVisibility}>
+                {showConfirmPassword ? <RiEyeOffFill /> : <RiEyeFill />}
+              </span>
+            </div>
           </div>
           <div className='d-flex justify-content-center mt-3'>
             <button type='submit' className='btn btn-primary btn-rounded w-50'>

@@ -1,11 +1,12 @@
-import { useEffect, useState } from 'react'
-import { Button, IconButton, Typography } from '@mui/material';
+/* eslint-disable no-unused-vars */
+import React, { useEffect, useState } from "react";
 import axios from 'axios';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import { Button, IconButton, Typography } from "@mui/material";
 import { Link, useNavigate } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import RefreshIcon from '@mui/icons-material/Refresh';
-import VisibilityIcon from '@mui/icons-material/Visibility';
 import { toast } from 'react-toastify';
 
 const Question = () => {
@@ -68,7 +69,7 @@ const Question = () => {
   const indexOfFirstQuestion = indexOfLastQuestion - questionsPerPage;
   const currentQuestions = questionData.slice(indexOfFirstQuestion, indexOfLastQuestion);
 
-  // Change page
+  // Function to change the current page
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
@@ -93,7 +94,7 @@ const Question = () => {
         <tbody>
           {currentQuestions.map((ques, index) => (
             <tr key={ques._id}>
-              <td>{index + 1}</td>
+              <td>{index + 1 + (currentPage - 1) * questionsPerPage}</td> {/* Calculate the correct index */}
               <td>{ques.title}</td>
               <td>{ques.categoryData[0].name}</td>
               <td>{ques.categoryData[0].type}</td>

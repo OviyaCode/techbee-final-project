@@ -18,9 +18,11 @@ const StudentDashboard = () => {
     <div className="container">
       <div className="row">
         <div className="col-lg-12">
+        <h4>Hello...! {username}  👏</h4>
           <div className="bg-c-dark-blue" style={{ width: '100%' }}>
             <div className="card-body">
-             <h4>Your Preparation</h4>
+
+              <h5>Your Preparation</h5>
             </div>
           </div>
         </div>

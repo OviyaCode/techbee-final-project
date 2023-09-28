@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+/* eslint-disable no-unused-vars */
+import React, { useEffect, useState } from "react";
 import axios from 'axios';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Button, IconButton } from "@mui/material";
@@ -51,7 +52,7 @@ const Results = () => {
   }, [results]);
 
   const handleBack = () => {
-    navigate(-1);
+    navigate('/admindashboard');
   };
 
   if (loading) {
@@ -66,10 +67,20 @@ const Results = () => {
     );
   }
 
+  // Create an object to store user data and their attempt questions
+  const userAttempts = {};
+  results.forEach(result => {
+    const userId = result.user?._id;
+    if (!userAttempts[userId]) {
+      userAttempts[userId] = { user: result.user, questions: [] };
+    }
+    userAttempts[userId].questions.push(result);
+  });
+
   // Calculate the index of the last and first user for the current page
   const indexOfLastUser = currentPage * usersPerPage;
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
-  const currentUsers = results.slice(indexOfFirstUser, indexOfLastUser);
+  const currentUsers = Object.values(userAttempts).slice(indexOfFirstUser, indexOfLastUser);
 
   // Function to change the current page
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
@@ -83,22 +94,18 @@ const Results = () => {
       <table className='table' style={{ width: '70%', alignContent: 'center' }}>
         <thead>
           <tr>
-            <th>ID</th>
+            <th>#</th>
             <th>User</th>
-            <th>Question</th>
-            <th>Score</th>
             <th>Action</th>
           </tr>
         </thead>
         <tbody>
-          {currentUsers.map((result, index) =>
-            <tr key={result._id}>
-              <td>{index + 1}</td>
-              <td>{result.user ? result.user.name : '-'}</td>
-              <td>{result.question && result.question.title}</td>
-              <td>{result.score}</td>
+          {currentUsers.map((userAttempt, index) =>
+            <tr key={index}>
+              <td>{indexOfFirstUser + index + 1}</td> {/* Calculate the correct index */}
+              <td>{userAttempt.user ? userAttempt.user.name : '-'}</td>
               <td>
-                <Link to={`/admindashboard/results/view/${result.user && result.user._id}`}>
+                <Link to={`/admindashboard/results/view/${userAttempt.user && userAttempt.user._id}`}>
                   <IconButton><VisibilityIcon /></IconButton>
                 </Link>
               </td>
@@ -110,7 +117,7 @@ const Results = () => {
       {/* Pagination */}
       <nav>
         <ul className='pagination'>
-          {Array.from({ length: Math.ceil(results.length / usersPerPage) }, (_, i) => (
+          {Array.from({ length: Math.ceil(Object.values(userAttempts).length / usersPerPage) }, (_, i) => (
             <li key={i} className={`page-item ${currentPage === i + 1 ? 'active' : ''}`}>
               <button className='page-link' onClick={() => paginate(i + 1)}>
                 {i + 1}
@@ -124,3 +131,4 @@ const Results = () => {
 }
 
 export default Results;
+
