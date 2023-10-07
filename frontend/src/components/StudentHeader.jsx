@@ -36,6 +36,7 @@ const StudentHeader = () => {
                 <Box sx={{ marginLeft: 5, display: 'flex', alignItems: "center", gap: "50px" }}>
                     <Typography variant='body2'><StyledLink to="/dashboard/questions" >Practice</StyledLink></Typography>
                     <Typography variant='body2'><StyledLink to={`/dashboard/user/${userId}`}>Results</StyledLink></Typography>
+                    <Typography variant='body2'><StyledLink to={`/dashboard/ranking`}>Leader board</StyledLink></Typography>
                 </Box>
                 <Box sx={{ flexGrow: 1 }} />
                 <IconButton title="profile" color="secondary" onClick={profile}>

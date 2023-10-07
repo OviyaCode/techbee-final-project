@@ -314,3 +314,13 @@ body::-webkit-scrollbar-thumb {
   font-size: 24px;
   color: #333;
 }
+
+.table-success {
+  --bs-table-bg: #44d148 !important;
+  border-bottom: #44d148;
+  --bs-table-hover-bg: #1f9e21 !important;
+  --bs-table-border-color: #44d148;
+  --bs-table-color: #f2f2f2 !important;
+
+}
+

@@ -1,7 +1,9 @@
 const Submission = require('../models/submissionModel');
 const Question = require('../models/questionModel');
+const User = require('../models/userModel');
 const axios = require('axios');
-const asyncHandler = require('express-async-handler')
+const asyncHandler = require('express-async-handler');
+const { default: mongoose } = require('mongoose');
 
 const submitCode = asyncHandler(async (req, res) => {
 
@@ -90,7 +92,7 @@ const runCode = async (req, res) => {
 
       let submissionOutputs = [];
       let testResult = null;
-      hasCompilationError = false; 
+      hasCompilationError = false;
 
       while (true) {
         const submissionStatusResponse = await axios.get(
@@ -153,7 +155,7 @@ const runCode = async (req, res) => {
     if (hasCompilationError) {
       return res.status(500).json({ message: 'Compilation Error, Please check your code' });
     }
-    
+
     return res.status(200).json({ message: 'Code executed successfully', results, submissionToken });
   } catch (err) {
     console.error(err);
@@ -216,10 +218,68 @@ const getUserSubmissionsCount = asyncHandler(async (req, res) => {
   }
 });
 
+const getRanking = asyncHandler(async (req, res) => {
+  try {
+    // first fetch all submissions
+    const submissions = await Submission.find()
+      .populate('user', 'username')
+      .select('user question timestamp')
+      .lean();
+
+    // second mapping to track the last attempt using timestamp for each user and question
+    const lastAttemptMap = new Map();
+
+    // filter and count the number of unique questions attempted by each user
+    submissions.forEach((submission) => {
+      const userId = submission.user._id.toString();
+      const questionId = submission.question._id.toString();
+      const timestamp = submission.timestamp;
+
+      // Check if this is the last attempt for this user and question
+      if (
+        !lastAttemptMap.has(userId + questionId) ||
+        timestamp > lastAttemptMap.get(userId + questionId)
+      ) {
+        lastAttemptMap.set(userId + questionId, timestamp);
+      }
+    });
+
+    //calculate the number of unique questions attempted by each user
+    const userAttemptsMap = new Map();
+    lastAttemptMap.forEach((timestamp, userQuestionId) => {
+      const userId = userQuestionId.substring(0, 24); // Extract the user ID from the combined key
+      if (!userAttemptsMap.has(userId)) {
+        userAttemptsMap.set(userId, 1);
+      } else {
+        userAttemptsMap.set(userId, userAttemptsMap.get(userId) + 1);
+      }
+    });
+
+    // sorting users by the number of unique questions attempted (in descending order)
+    const rankedUsers = [...userAttemptsMap.entries()]
+      .sort((a, b) => b[1] - a[1]) // Sort in descending order based on the number of unique questions attempted
+      .map(([userId, attempts]) => ({
+        userId,
+        attempts,
+      }));
+
+    // return statement
+    res.status(200).json({ ranking: rankedUsers });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+
+  
+});
+
+
+
 module.exports = {
   submitCode,
   runCode,
   getUserSubmissions,
   getAllSubmissions,
-  getUserSubmissionsCount
+  getUserSubmissionsCount,
+  getRanking
 };

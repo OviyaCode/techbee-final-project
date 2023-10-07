@@ -34,6 +34,7 @@ import SingleResult from './views/result/SingleResult';
 import UserResult from './views/student/UserResult';
 import AdminDashboard from './views/AdminDashboard';
 import ProtectedRoute from './ProtectedRoute';
+import LeaderBoard from './views/student/LeaderBoard';
 
 function App() {
   return (
@@ -66,6 +67,7 @@ function App() {
             <Route exact path='results/:userId' element={<ResultPanel />} />
             <Route exact path='user/:id' element={<UserResult />} />
             <Route exact path='settings' element={<StudSettings />} />
+            <Route exact path='ranking' element={< LeaderBoard/>} />
           </Route>
           <Route path='/dashboard/*' element={<PageNotFound2 />} />
           <Route path='/admindashboard/*' element={<PageNotFound2 />} />
