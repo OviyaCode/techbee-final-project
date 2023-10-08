@@ -170,7 +170,7 @@ const resetPassword = asyncHandler(async (req, res) => {
             console.log(error);
         }
         else {
-            console.log('Email sent: ' + info.response);
+            // console.log('Email sent: ' + info.response);
             return res.send({ 
                 status: "Success",
                 userId: user._id ,
