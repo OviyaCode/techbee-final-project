@@ -20,7 +20,9 @@
     "jsonwebtoken": "^9.0.0",
     "jwt-decode": "^3.1.2",
     "mongoose": "^7.0.2",
+    "nodemailer": "^6.9.5",
     "nodemon": "^2.0.21",
+    "otp-generator": "^4.0.1",
     "react-ace": "^10.1.0"
   }
 }

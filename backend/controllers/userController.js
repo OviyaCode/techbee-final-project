@@ -1,6 +1,9 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const asyncHandler = require('express-async-handler');
+const nodemailer = require('nodemailer');
+const { EMAIL, PASSWORD } = require('../env.js');
+
 const User = require('../models/userModel');
 const Result = require('../models/resultModel');
 const Submission = require('../models/submissionModel');
@@ -137,6 +140,42 @@ const generateJWT = (id) => {
     });
 }
 
+const resetPassword = asyncHandler(async (req, res) => {
+    const { email } = req.body;
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+        return res.send({ Status: "User not exists" })
+    }
+    const token = jwt.sign({ id: user._id }, "123456", { expiresIn: "1d" })
+
+    var transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: EMAIL,
+            pass: PASSWORD
+        }
+    })
+
+    const mailOptions = {
+        from: EMAIL,
+        to: email,
+        subject: 'Reset Password',
+        text: `http://localhost:3000/reset-password/${user._id}/${token}`
+    }
+
+    transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            console.log(error);
+        }
+        else {
+            return res.send({ status: "Success" })
+        }
+    })
+
+})
+
 module.exports = {
     registerUser,
     LoginUser,
@@ -144,5 +183,6 @@ module.exports = {
     updateUser,
     deleteUser,
     getUsers,
-    getUser
+    getUser,
+    resetPassword
 }

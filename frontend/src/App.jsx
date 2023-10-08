@@ -14,7 +14,7 @@ import QuizCat from './views/quizcat/QuizCat';
 import CreateQuizCat from './views/quizcat/CreateQuizCat';
 import UpdateQuizCat from './views/quizcat/UpdateQuizCat';
 import Results from './views/result/Results';
-
+import ForgotPassword from './auth/ForgotPassword';
 
 import Settings from './views/Settings';
 
@@ -35,6 +35,7 @@ import UserResult from './views/student/UserResult';
 import AdminDashboard from './views/AdminDashboard';
 import ProtectedRoute from './ProtectedRoute';
 import LeaderBoard from './views/student/LeaderBoard';
+import ResetPassword from './auth/ResetPassword';
 
 function App() {
   return (
@@ -43,6 +44,8 @@ function App() {
         <Routes>
           <Route exact path="/" element={<Login />} />
           <Route exact path="/register" element={<Register />} />
+          <Route exact path="/forgot-password" element={<ForgotPassword />} />
+          <Route exact path="/reset-password" element={<ResetPassword />} />
           <Route exact path="/admindashboard" element={<ProtectedRoute><AdminBaseLayout /></ProtectedRoute>}>
             <Route index element={<AdminDashboard />} />
             <Route exact path="admin" element={<Admin />} />

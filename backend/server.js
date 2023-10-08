@@ -11,7 +11,12 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }))
 
-app.use(cors());
+const corsOptions = {
+  origin: 'http://127.0.0.1:3000',
+  credentials: true, // Enable credentials (cookies) in cross-origin requests
+};
+
+app.use(cors(corsOptions));
 
 
 //quiz-cat route
@@ -24,6 +29,8 @@ app.use('/api/questions', require('./routes/questionRoute'))
 app.use('/api/submissions', require('./routes/submissionRoute'));
 //result route
 app.use('/api/results', require('./routes/resultRoute'));
+//mail service route
+// app.use('/api/forgot-password', require('./routes/mailRoute'));
 //middleware
 app.use(errorHandler)
 

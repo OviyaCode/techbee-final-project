@@ -138,6 +138,9 @@ const Login = () => {
         <p className='register text-center mt-2'>
           New to <Link to="/register">TechBee</Link>
         </p>
+        <p className='register text-center mt-2'>
+          <Link to="/forgot-password">forgot password</Link>
+        </p>
       </div>
     </form>
   </div>

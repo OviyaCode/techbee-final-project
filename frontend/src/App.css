@@ -324,3 +324,12 @@ body::-webkit-scrollbar-thumb {
 
 }
 
+.input-button-container {
+  display: flex;
+  align-items: center;
+}
+
+
+.input-button-container input {
+  margin-right: 10px; 
+}
