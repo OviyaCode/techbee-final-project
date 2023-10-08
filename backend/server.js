@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }))
 
 const corsOptions = {
-  origin: 'http://127.0.0.1:3000',
+  origin: 'http://localhost:3000',
   credentials: true, // Enable credentials (cookies) in cross-origin requests
 };
 

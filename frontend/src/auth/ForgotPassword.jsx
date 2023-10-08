@@ -1,18 +1,21 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const ForgotPassword = () => {
     const [email, setEmail] = useState('');
     const navigate = useNavigate();
-    axios.defaults.withCredentials = true;
+
     const handleSubmit = (e) => {
         e.preventDefault();
+
         axios.post('http://localhost:8080/api/users/forgot-password', { email })
             .then((response) => {
-                if (response.data.status === "success") {
-                    navigate('/')
-                }
+                console.log(response.data);
+               toast.success('Check your mail please...')
+                navigate('/')
+                
             })
     }
     return (

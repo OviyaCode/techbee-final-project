@@ -45,7 +45,7 @@ function App() {
           <Route exact path="/" element={<Login />} />
           <Route exact path="/register" element={<Register />} />
           <Route exact path="/forgot-password" element={<ForgotPassword />} />
-          <Route exact path="/reset-password" element={<ResetPassword />} />
+          <Route exact path="/reset-password/:id/:token" element={<ResetPassword />} />
           <Route exact path="/admindashboard" element={<ProtectedRoute><AdminBaseLayout /></ProtectedRoute>}>
             <Route index element={<AdminDashboard />} />
             <Route exact path="admin" element={<Admin />} />

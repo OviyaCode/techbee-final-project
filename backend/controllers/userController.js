@@ -170,11 +170,51 @@ const resetPassword = asyncHandler(async (req, res) => {
             console.log(error);
         }
         else {
-            return res.send({ status: "Success" })
+            console.log('Email sent: ' + info.response);
+            return res.send({ 
+                status: "Success",
+                userId: user._id ,
+                msg:"Email sent"
+             })
         }
     })
 
 })
+
+const changePassword = asyncHandler(async (req, res) => {
+    const { token } = req.params;
+    const { password } = req.body;
+
+    const user = await User.findById(req.params.id);
+    if (!user) {
+        res.status(400)
+        throw new Error("User not found")
+    }
+    else {
+        jwt.verify(token, "123456", async (error, decoded) => {
+            if (error) {
+                res.json({ status: "Error with token" })
+            }
+            else {
+                try {
+                    const salt = await bcrypt.genSalt(10);
+                    const hashedPassword = await bcrypt.hash(password, salt);
+
+                    // Update the password field in the user document
+                    user.password = hashedPassword;
+                    const updateUser = await user.save();
+
+                    res.status(200).json({
+                        updateUser
+                    });
+                } catch (err) {
+                    res.status(500).json({ error: "Password update failed" });
+                }
+            }
+        })
+    }
+});
+
 
 module.exports = {
     registerUser,
@@ -184,5 +224,6 @@ module.exports = {
     deleteUser,
     getUsers,
     getUser,
-    resetPassword
+    resetPassword,
+    changePassword
 }
