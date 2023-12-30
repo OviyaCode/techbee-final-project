@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -9,7 +8,6 @@ import jwt from 'jsonwebtoken';
 const QuestionList = () => {
   const [question, setQuestion] = useState(null);
   const [questionIds, setQuestionIds] = useState([]);
-  const [attempt, setAttempt] = useState([]);
   const [state, setState] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showSolved, setShowSolved] = useState(false);
